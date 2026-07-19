@@ -27,7 +27,5 @@ setTimeout(() => {
   });
   
   const process = command.spawn();
-  process.status.then(() => {
-    Deno.exit(0);
-  });
+  // Edge is managed by process.status but we let the server handle shutdown
 }, 500);

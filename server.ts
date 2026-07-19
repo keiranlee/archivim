@@ -114,6 +114,11 @@ function buildArgs(link: string, isYouTube: boolean, s: Settings): string[] {
 Deno.serve({ port: PORT, hostname: "127.0.0.1" }, async (req: Request) => {
   const url = new URL(req.url);
 
+  if (req.method === "POST" && url.pathname === "/api/shutdown") {
+    setTimeout(() => Deno.exit(0), 100);
+    return new Response("OK", { status: 200 });
+  }
+
   if (url.pathname === "/api/download" && req.method === "POST") {
     try {
       const body = await req.json();

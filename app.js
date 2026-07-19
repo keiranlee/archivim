@@ -431,3 +431,5 @@ window.addEventListener('load', () => {
     window.moveTo(x, y);
   }
 });
+
+window.addEventListener('beforeunload', () => { navigator.sendBeacon('/api/shutdown'); });

@@ -1,3 +1,4 @@
+console.log = () => {}; console.error = () => {};
 import "./server.ts";
 
 setTimeout(() => {

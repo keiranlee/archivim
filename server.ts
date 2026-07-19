@@ -1,3 +1,4 @@
+console.log = () => {}; console.error = () => {};
 /**
  * archivim — Deno backend server
  * Accepts dynamic settings from frontend and builds yt-dlp commands accordingly.
@@ -111,7 +112,7 @@ function buildArgs(link: string, isYouTube: boolean, s: Settings): string[] {
   return args;
 }
 
-Deno.serve({ port: PORT, hostname: "127.0.0.1" }, async (req: Request) => {
+Deno.serve({ port: PORT, hostname: "127.0.0.1", onListen: () => {} }, async (req: Request) => {
   const url = new URL(req.url);
 
   if (req.method === "POST" && url.pathname === "/api/shutdown") {

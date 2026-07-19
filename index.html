@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>archivim</title>
+  <meta name="description" content="YouTube Music ve SoundCloud'dan müzik indirin." />
+  <link rel="icon" type="image/x-icon" href="/icon.ico" />
+  <link rel="icon" type="image/jpeg" sizes="512x512" href="/archivim_icon.jpg" />
+  <link rel="apple-touch-icon" href="/archivim_icon.jpg" />
+  <link rel="manifest" href="/manifest.json" />
+  <meta name="theme-color" content="#8b5cf6" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="app">
+    <div class="brand">
+      <div class="brand-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M9 18V5l12-2v13"/>
+          <circle cx="6" cy="18" r="3"/>
+          <circle cx="18" cy="16" r="3"/>
+        </svg>
+      </div>
+      <h1>archivim</h1>
+      <p>YouTube Music &amp; SoundCloud &rarr; Desktop</p>
+    </div>
+    <div class="card">
+      <div class="input-group">
+        <div class="input-wrapper">
+          <input type="url" id="url-input" placeholder="YouTube Music veya SoundCloud linki..." autocomplete="off" spellcheck="false" />
+          <div id="source-badge" class="source-badge"></div>
+        </div>
+        <button id="download-btn" title="İndir">
+          <span id="btn-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
+            </svg>
+          </span>
+          <span id="btn-text">İndir</span>
+        </button>
+        <button id="settings-btn" class="icon-btn" title="Ayarlar">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/>
+          </svg>
+        </button>
+      </div>
+      <div id="progress-section" class="progress-section">
+        <div class="status-line">
+          <span id="status-text" class="status-text">Bağlanıyor...</span>
+          <span id="progress-percent" class="progress-percent"></span>
+        </div>
+        <div class="progress-track">
+          <div id="progress-fill" class="progress-fill"></div>
+        </div>
+        <div class="progress-actions" style="display: flex; gap: 0.5rem; margin-top: 0.5rem;">
+          <button id="log-toggle" class="log-toggle">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+            Detaylar
+          </button>
+          <button id="cancel-btn" class="settings-btn-secondary" style="display: none; padding: 0.25rem 0.75rem; font-size: 0.75rem; color: #ef4444; border-color: #ef4444; background: transparent;">
+            &#304;ptal Et
+          </button>
+        </div>
+        <div id="log-panel" class="log-panel">
+          <div id="log-content" class="log-content"></div>
+        </div>
+      </div>
+      <div id="result-section" class="result-section">
+        <div id="result-card" class="result-card">
+          <div class="result-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          </div>
+          <div class="result-info">
+            <div id="result-title" class="result-title"></div>
+            <div id="result-subtitle" class="result-subtitle"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="history-section" class="history-section" style="display: none;">
+      <div class="history-header">
+        <span class="history-title">Son İndirilenler</span>
+        <button id="history-clear" class="history-clear">Temizle</button>
+      </div>
+      <div id="history-list" class="history-list"></div>
+    </div>
+    <div class="footer">
+      <kbd>Ctrl+V</kbd> ile yapıştır, <kbd>Enter</kbd> ile indir
+    </div>
+  </div>
+  <div id="settings-overlay" class="settings-overlay">
+    <div class="settings-modal">
+      <div class="settings-header">
+        <div class="settings-header-left">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18">
+            <circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/>
+          </svg>
+          <span>Ayarlar</span>
+        </div>
+        <button id="settings-close" class="settings-close">&times;</button>
+      </div>
+      <div class="settings-body">
+        <div class="settings-section">
+          <div class="section-title">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="14" height="14"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+            Ses Ayarları
+          </div>
+          <div class="setting-row">
+            <label class="setting-label">Ses Formatı</label>
+            <select id="s-audio-format" class="setting-select">
+              <option value="m4a" selected>M4A (AAC)</option>
+              <option value="mp3">MP3</option>
+              <option value="opus">Opus</option>
+              <option value="flac">FLAC</option>
+              <option value="wav">WAV</option>
+              <option value="aac">AAC</option>
+              <option value="vorbis">Vorbis (OGG)</option>
+              <option value="alac">ALAC</option>
+            </select>
+          </div>
+          <div class="setting-row">
+            <label class="setting-label">Ses Kalitesi</label>
+            <select id="s-audio-quality" class="setting-select">
+              <option value="0" selected>0 — En iyi</option>
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5 — Orta</option>
+              <option value="6">6</option>
+              <option value="7">7</option>
+              <option value="8">8</option>
+              <option value="9">9</option>
+              <option value="10">10 — En düşük</option>
+            </select>
+          </div>
+          <div class="setting-row">
+            <label class="setting-label">Format Seçimi
+              <span class="setting-hint">yt-dlp -f parametresi</span>
+            </label>
+            <input type="text" id="s-format-selection" class="setting-input" value="bestaudio[ext=m4a]/bestaudio" spellcheck="false" />
+          </div>
+        </div>
+        <div class="settings-section">
+          <div class="section-title">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="14" height="14"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+            Metadata &amp; Kapak
+          </div>
+          <div class="setting-row">
+            <label class="setting-label">Metadata Göm (ID3 Tag)</label>
+            <label class="toggle"><input type="checkbox" id="s-embed-metadata" checked /><span class="toggle-slider"></span></label>
+          </div>
+          <div class="setting-row">
+            <label class="setting-label">Kapak Görseli Göm</label>
+            <label class="toggle"><input type="checkbox" id="s-embed-thumbnail" checked /><span class="toggle-slider"></span></label>
+          </div>
+          <div class="setting-row">
+            <label class="setting-label">Kapak Formatı</label>
+            <select id="s-convert-thumbnails" class="setting-select">
+              <option value="jpg" selected>JPG</option>
+              <option value="png">PNG</option>
+              <option value="webp">WebP</option>
+              <option value="">Dönüştürme</option>
+            </select>
+          </div>
+          <div class="setting-row">
+            <label class="setting-label">Bölüm İşaretlerini Göm</label>
+            <label class="toggle"><input type="checkbox" id="s-embed-chapters" /><span class="toggle-slider"></span></label>
+          </div>
+          <div class="setting-row">
+            <label class="setting-label">Şarkı Sözlerini Kaydet (.lrc)</label>
+            <label class="toggle"><input type="checkbox" id="s-write-lyrics" /><span class="toggle-slider"></span></label>
+          </div>
+        </div>
+        <div class="settings-section">
+          <div class="section-title">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="14" height="14"><path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z"/></svg>
+            Dosya Ayarları
+          </div>
+          <div class="setting-row setting-row-col">
+            <label class="setting-label">YouTube Dosya Adı Şablonu</label>
+            <input type="text" id="s-yt-template" class="setting-input" value="%(artist)s - %(title)s" spellcheck="false" />
+            <div class="template-tags" data-target="s-yt-template">
+              <button class="tag" data-val="%(artist)s">artist</button>
+              <button class="tag" data-val="%(title)s">title</button>
+              <button class="tag" data-val="%(album)s">album</button>
+              <button class="tag" data-val="%(track)s">track</button>
+              <button class="tag" data-val="%(track_number)s">track_no</button>
+              <button class="tag" data-val="%(uploader)s">uploader</button>
+              <button class="tag" data-val="%(release_year)s">year</button>
+              <button class="tag" data-val="%(upload_date)s">date</button>
+            </div>
+          </div>
+          <div class="setting-row setting-row-col">
+            <label class="setting-label">SoundCloud Dosya Adı Şablonu</label>
+            <input type="text" id="s-sc-template" class="setting-input" value="%(uploader)s - %(title)s" spellcheck="false" />
+            <div class="template-tags" data-target="s-sc-template">
+              <button class="tag" data-val="%(uploader)s">uploader</button>
+              <button class="tag" data-val="%(title)s">title</button>
+              <button class="tag" data-val="%(artist)s">artist</button>
+              <button class="tag" data-val="%(track)s">track</button>
+              <button class="tag" data-val="%(upload_date)s">date</button>
+              <button class="tag" data-val="%(duration)s">duration</button>
+            </div>
+          </div>
+          <div class="setting-row setting-row-col">
+            <label class="setting-label">Kayıt Klasörü</label>
+            <input type="text" id="s-output-dir" class="setting-input" value="" placeholder="Masaüstü (varsayılan)" spellcheck="false" />
+            <span class="setting-hint">Boş bırakırsan masaüstüne kaydeder</span>
+          </div>
+          <div class="setting-row">
+            <label class="setting-label">ASCII Dosya Adı
+              <span class="setting-hint">Özel karakterleri kaldırır</span>
+            </label>
+            <label class="toggle"><input type="checkbox" id="s-restrict-filenames" /><span class="toggle-slider"></span></label>
+          </div>
+        </div>
+        <div class="settings-section">
+          <div class="section-title">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="14" height="14"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+            Gelişmiş
+          </div>
+          <div class="setting-row">
+            <label class="setting-label">SponsorBlock Atlama
+              <span class="setting-hint">Sponsor/intro/outro keser</span>
+            </label>
+            <label class="toggle"><input type="checkbox" id="s-sponsorblock" /><span class="toggle-slider"></span></label>
+          </div>
+          <div class="setting-row">
+            <label class="setting-label">Bölümlere Ayır
+              <span class="setting-hint">Her bölümü ayrı dosya yapar</span>
+            </label>
+            <label class="toggle"><input type="checkbox" id="s-split-chapters" /><span class="toggle-slider"></span></label>
+          </div>
+          <div class="setting-row">
+            <label class="setting-label">Çerezler (Cookies)</label>
+            <select id="s-cookies" class="setting-select">
+              <option value="" selected>Kullanma</option>
+              <option value="edge">Edge</option>
+              <option value="chrome">Chrome</option>
+              <option value="firefox">Firefox</option>
+              <option value="brave">Brave</option>
+              <option value="opera">Opera</option>
+            </select>
+          </div>
+          <div class="setting-row">
+            <label class="setting-label">Tekrar Sayısı</label>
+            <input type="number" id="s-retries" class="setting-input setting-input-sm" value="10" min="1" max="100" />
+          </div>
+          <div class="setting-row">
+            <label class="setting-label">İndirmeler Arası Bekleme
+              <span class="setting-hint">saniye</span>
+            </label>
+            <input type="number" id="s-sleep" class="setting-input setting-input-sm" value="0" min="0" max="60" />
+          </div>
+          <div class="setting-row">
+            <label class="setting-label">Proxy</label>
+            <input type="text" id="s-proxy" class="setting-input" value="" placeholder="boş = kullanma" spellcheck="false" />
+          </div>
+          <div class="setting-row">
+            <label class="setting-label">Geo Bypass</label>
+            <label class="toggle"><input type="checkbox" id="s-geo-bypass" checked /><span class="toggle-slider"></span></label>
+          </div>
+        </div>
+        <div class="settings-section">
+          <div class="section-title">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="14" height="14"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
+            Komut Önizleme
+          </div>
+          <div class="command-preview" id="command-preview">yt-dlp ...</div>
+        </div>
+      </div>
+      <div class="settings-footer">
+        <button id="settings-reset" class="settings-btn-secondary">Varsayılana Dön</button>
+        <button id="settings-save" class="settings-btn-primary">Kaydet</button>
+      </div>
+    </div>
+  </div>
+  <script src="app.js"></script>
+</body>
+</html>

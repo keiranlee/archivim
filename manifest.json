@@ -1,0 +1,17 @@
+{
+  "name": "archivim",
+  "short_name": "archivim",
+  "description": "YouTube Music & SoundCloud audio downloader",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0a0a0f",
+  "theme_color": "#8b5cf6",
+  "icons": [
+    {
+      "src": "/archivim_icon.jpg",
+      "sizes": "512x512",
+      "type": "image/jpeg",
+      "purpose": "any"
+    }
+  ]
+}

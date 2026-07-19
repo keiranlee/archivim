@@ -15,15 +15,21 @@ setTimeout(() => {
 
   const userDataDir = Deno.env.get("LocalAppData") + "\\archivim-profile";
   
-  const command = new Deno.Command(edgeExe, {
+  const argsList = [
+    "'--app=http://127.0.0.1:8384'",
+    "'--window-size=580,720'",
+    `'--user-data-dir=${userDataDir}'`,
+    "'--disable-extensions'",
+    "'--disable-default-apps'",
+    "'--no-first-run'",
+    "'--disable-sync'"
+  ].join(",");
+
+  const command = new Deno.Command("powershell.exe", {
     args: [
-      "--app=http://127.0.0.1:8384",
-      "--window-size=580,720",
-      "--user-data-dir=${userDataDir}",
-      "--disable-extensions",
-      "--disable-default-apps",
-      "--no-first-run",
-      "--disable-sync"
+      "-WindowStyle", "Hidden",
+      "-Command",
+      `Start-Process -FilePath '${edgeExe}' -ArgumentList ${argsList}`
     ]
   });
   

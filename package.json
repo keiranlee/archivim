@@ -1,0 +1,46 @@
+{
+  "name": "archivim",
+  "version": "1.0.0",
+  "description": "YouTube Music & SoundCloud audio downloader",
+  "main": "src/main.js",
+  "scripts": {
+    "start": "electron .",
+    "build": "electron-builder --win portable",
+    "build-installer": "electron-builder --win nsis"
+  },
+  "author": "archivim",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^35.0.0",
+    "electron-builder": "^26.0.0"
+  },
+  "build": {
+    "appId": "com.archivim.app",
+    "productName": "archivim",
+    "icon": "src/icon.ico",
+    "win": {
+      "target": [
+        {
+          "target": "portable",
+          "arch": ["x64"]
+        }
+      ],
+      "icon": "src/icon.ico"
+    },
+    "portable": {
+      "artifactName": "archivim.exe"
+    },
+    "nsis": {
+      "oneClick": true,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": false,
+      "installerIcon": "src/icon.ico",
+      "uninstallerIcon": "src/icon.ico",
+      "artifactName": "archivim-setup.exe"
+    },
+    "files": [
+      "src/**/*"
+    ],
+    "extraResources": []
+  }
+}

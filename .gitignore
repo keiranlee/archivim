@@ -1,12 +1,6 @@
-*.m4a
-*.mp3
-*.wav
-*.flac
-*.ogg
-*.webm
-*.mp4
-*.part
-*.ytdl
-desktop.ini
-
+node_modules/
+dist/
+build/
+*.log
+.DS_Store
 *.exe

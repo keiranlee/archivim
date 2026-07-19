@@ -40,6 +40,17 @@ body {
   display: flex; flex-direction: column; align-items: center; justify-content: center;
   padding: 2rem; position: relative; overflow-x: hidden;
 }
+.titlebar {
+  position: fixed; top: 0; left: 0; right: 0; height: 36px;
+  -webkit-app-region: drag; z-index: 9999;
+}
+
+/* ── Custom Scrollbar ── */
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: var(--bg-primary); }
+::-webkit-scrollbar-thumb { background: var(--bg-hover); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: var(--border-focus); }
+
 body::before {
   content: ''; position: fixed; top: -50%; left: -50%; width: 200%; height: 200%;
   background: radial-gradient(ellipse at 25% 20%, rgba(139,92,246,0.04) 0%, transparent 50%),

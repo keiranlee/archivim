@@ -424,12 +424,3 @@ function escapeHtml(str) { const d = document.createElement('div'); d.textConten
 
 renderHistory();
 urlInput.focus();
-window.addEventListener('load', () => {
-  if (window.outerWidth) {
-    const x = Math.max(0, (screen.availWidth - window.outerWidth) / 2);
-    const y = Math.max(0, (screen.availHeight - window.outerHeight) / 2);
-    window.moveTo(x, y);
-  }
-});
-
-window.addEventListener('beforeunload', () => { navigator.sendBeacon('/api/shutdown'); });
